@@ -1,0 +1,19 @@
+//const {sendResponse, sendError } = require()
+const { db } = require('../../services/db'); 
+
+
+exports.handler = async (event, context) => {
+	const { musicId } = event.pathParameters; 
+
+	try {
+		await db.delete({
+			//TableName: ''
+			//Key: { id:  musicId }
+		}).promise()
+		
+		return sendResponse(200, {success: true, musics: Items }) 
+		
+	} catch (error) {
+		return sendError(500, {sucess: false, message: 'Could not get musics'  })
+	}
+}
