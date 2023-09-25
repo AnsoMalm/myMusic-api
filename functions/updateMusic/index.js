@@ -19,6 +19,6 @@ exports.handler = async (event, context) => {
 		return sendResponse(200, {success: true }), 
 
 	} catch (error) {
-		return sendError(500, { success: false, message: 'Could not add music' })
+		return sendError(500, { success: false, message: 'Could not update music' })
 	}
  }

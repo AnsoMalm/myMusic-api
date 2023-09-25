@@ -1,4 +1,4 @@
-//const {sendResponse, sendError } = require()
+const {sendResponse, sendError } = require()
 const { db } = require('../../services/db'); 
 
 
@@ -11,9 +11,9 @@ exports.handler = async (event, context) => {
 			//Key: { id:  musicId }
 		}).promise()
 		
-		return sendResponse(200, {success: true, musics: Items }) 
+		return sendResponse(200, {success: true }) 
 		
 	} catch (error) {
-		return sendError(500, {sucess: false, message: 'Could not get musics'  })
+		return sendError(500, {sucess: false, message: 'Could not remove music'  })
 	}
 }
