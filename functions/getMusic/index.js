@@ -1,35 +1,51 @@
-//const {sendResponse, sendError } = require()
-const { db } = require('../../services/db'); 
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import {DynamoDBClient, ScanCommand, GetCommand} from "aws-sdk/lik-dynamodb"
 
-const musics = [
-	{	
-		group: 'Lastkaj14',
-		songTitle: 'Våra dar', 
-		album: 'Stormar'
-	}, 
-	{
-		group: 'MissLi',
-		songTitle: 'Komplicerad', 
-		album: 'Underbart i all misär',
+const client = new DynamoDBClient({}); 
+const dynamo = DynamoDBDocumentClient.from(client)
+
+const TableName = "Music"; 
+
+// const musics = [
+// 	{	
+// 		group: 'Lastkaj14',
+// 		songTitle: 'Våra dar', 
+// 		album: 'Stormar'
+// 	}, 
+// 	{
+// 		group: 'MissLi',
+// 		songTitle: 'Komplicerad', 
+// 		album: 'Underbart i all misär',
 		
+// 	}
+// ]
 
+export const handler = async (event, context) => {
+	let body; 
+	let statusCode = 200; 
+	const headers = {
+		"Content-type": "application/json"
 	}
-]
 
-exports.handler = async (event, context) => {
 	try {
-		//hämtar allt i databasen
-		const { Items } = await db.scan({
-			TableName:
-			FilterExpression: "attribute_exists(#DYNOBASE_ )",
-			ExpressionAttributeNames: {
-			"#DYNOBASE_": "", 
-			} 
-		}).promise()
+		switch (event.routeKey) {
+			case "GET /items": 
+			body = await dynamo.send(
+				new ScanCommand({TableName: TableName})
+			); 
+			body = body.Items
+		}
 		
-		return sendResponse(200, {success: true, musics: Items }) 
+		return {
+			statusCode, 
+			body, 
+			headers,
+		}
 		
-	} catch (error) {
-		return sendError(500, {sucess: false, message: 'Could not get musics'  })
+	} catch (err) {
+		statusCode = 400; 
+		body = err.message; 
+	} finally {
+		body = JSON.stringify(body); 
 	}
 }
