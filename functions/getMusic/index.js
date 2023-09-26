@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
-import {DynamoDBClient, ScanCommand} from "@aws-sdk/lib-dynamodb"
+import {DynamoDBDocumentClient, ScanCommand} from "@aws-sdk/lib-dynamodb"
 
 const client = new DynamoDBClient({}); 
 const dynamo = DynamoDBDocumentClient.from(client)
