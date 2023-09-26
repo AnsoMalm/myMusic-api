@@ -1,10 +1,10 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
-import {DynamoDBClient, ScanCommand} from "aws-sdk/lib-dynamodb"
+import {DynamoDBClient, ScanCommand} from "@aws-sdk/lib-dynamodb"
 
 const client = new DynamoDBClient({}); 
 const dynamo = DynamoDBDocumentClient.from(client)
 
-const TableName = "Music"; 
+const tableName = "Music"; 
 
 export const handler = async (event) => {
 	let body; 
@@ -15,7 +15,7 @@ export const handler = async (event) => {
 
 	try {
 			body = await dynamo.send(
-				new ScanCommand({TableName: TableName})
+				new ScanCommand({TableName: tableName})
 			); 
 			body = body.Items
 		
