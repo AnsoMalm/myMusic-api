@@ -22,7 +22,7 @@ export const handler = async (event) => {
 				TableName: tableName,
 				Item: {
 					id: id, 
-					group: group,
+					Group: group,
 				} 
 			})
 		)
