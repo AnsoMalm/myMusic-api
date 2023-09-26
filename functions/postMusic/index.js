@@ -1,26 +1,43 @@
-//const {sendResponse, sendError } = require()
-const { db } = require('../../services/db'); 
-//const { nanoid } = require('nanoid') //<-- ska installera det. 
 
-exports.handler = async (event, context) => {
-	//const {songTitle, album } = JSON.parse(event.body)
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import {DynamoDBDocumentClient, PutCommand} from "@aws-sdk/lib-dynamodb"
+import {nanoid} from "nanoid"
 
-	try {
-		//const id = nanoid()
+const client = new DynamoDBClient({}); 
+const dynamo = DynamoDBDocumentClient.from(client)
 
-		await db.put({
-			//TableName: Mitt table i dynamodb,
-			Item: {
-				id: id, 
-				songTitle: songTitle, 
-				album: album,  
-			}
-		}).promise(); 
+const tableName = "Music"; 
 
-		return sendResponse(200, {success: true })
-		
-	} catch (error) {
-		return sendError(500, {success: false, message: 'Could not add music'})
-		
+export const handler = async (event) => {
+	let body; 
+	let statusCode = 200; 
+	const headers = {
+		"Content-type": "application/json"
 	}
-}
+	try {
+		const id = nanoid()
+		const group = JSON.parse(event.body); 
+		await dynamo.send(
+			new PutCommand({
+				TableName: tableName,
+				Item: {
+					id: id, 
+					group: group,
+				} 
+			})
+		)
+		body = `Put group ${id}`
+		
+	} catch (err) {
+		statusCode = 400;
+		body = err.message;
+	  } finally {
+		body = JSON.stringify(body);
+	  }
+	
+	  return {
+		statusCode,
+		body,
+		headers,
+	  };
+	};
