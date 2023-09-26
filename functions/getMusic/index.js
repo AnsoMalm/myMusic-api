@@ -6,20 +6,6 @@ const dynamo = DynamoDBDocumentClient.from(client)
 
 const TableName = "Music"; 
 
-// const musics = [
-// 	{	
-// 		group: 'Lastkaj14',
-// 		songTitle: 'Våra dar', 
-// 		album: 'Stormar'
-// 	}, 
-// 	{
-// 		group: 'MissLi',
-// 		songTitle: 'Komplicerad', 
-// 		album: 'Underbart i all misär',
-		
-// 	}
-// ]
-
 export const handler = async (event, context) => {
 	let body; 
 	let statusCode = 200; 
