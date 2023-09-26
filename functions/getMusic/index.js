@@ -6,7 +6,7 @@ const dynamo = DynamoDBDocumentClient.from(client)
 
 const TableName = "Music"; 
 
-export const handler = async (event, context) => {
+export const handler = async (event) => {
 	let body; 
 	let statusCode = 200; 
 	const headers = {
@@ -14,24 +14,20 @@ export const handler = async (event, context) => {
 	}
 
 	try {
-		switch (event.routeKey) {
-			case "GET /items": 
 			body = await dynamo.send(
 				new ScanCommand({TableName: TableName})
 			); 
 			body = body.Items
-		}
-		
-		return {
-			statusCode, 
-			body, 
-			headers,
-		}
 		
 	} catch (err) {
 		statusCode = 400; 
 		body = err.message; 
 	} finally {
 		body = JSON.stringify(body); 
+	}
+	return {
+		statusCode, 
+		body, 
+		headers,
 	}
 }
