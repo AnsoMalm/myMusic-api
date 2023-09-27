@@ -23,7 +23,7 @@ export const handler = async (event) => {
 				Item: {
 					id: id, 
 					Group: group.Group,
-					SongTitle: group.songTitle, 
+					SongTitle: group.SongTitle, 
 				} 
 			})
 		)
