@@ -1,6 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import {DynamoDBDocumentClient, DeleteCommand, GetCommand} from "@aws-sdk/lib-dynamodb"
-import {nanoid} from "nanoid"
 
 const client = new DynamoDBClient({}); 
 const dynamo = DynamoDBDocumentClient.from(client)
