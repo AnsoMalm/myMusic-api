@@ -1,24 +1,46 @@
-//const {sendResponse, sendError } = require()
-const { db } = require('../../services/db'); 
 
-exports.handler = async (event, context) => {
-	const { musicId } = event.pathParameters; 
-	const { music } = JSON.parse(event.body)
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import {DynamoDBDocumentClient, UpdateCommand} from "@aws-sdk/lib-dynamodb"
+import {nanoid} from "nanoid"
 
-	try {
-		await db.update({
-			//TableName: '',  <-- tablename
-			//Key: {id: musicId }  -> lärarens 
-			//ReturnValues: 'ALL_NEW', 
-			//UpdateExpression: 'set music = :music',   -> Lärarens ex set insult = :insult
-			//ExpressionAttributeValues: {
-			//':music': music   --> lärarens exempel ':insult': insult
-			//}
-		}).promise()
-		
-		return sendResponse(200, {success: true }), 
+const client = new DynamoDBClient({}); 
+const dynamo = DynamoDBDocumentClient.from(client)
 
-	} catch (error) {
-		return sendError(500, { success: false, message: 'Could not update music' })
+const tableName = "Music"; 
+
+export const handler = async (event) => {
+	let body; 
+	let statusCode = 200; 
+	const headers = {
+		"Content-type": "application/json"
 	}
- }
+	try {
+		const group = JSON.parse(event.body)
+		const id = event.pathParameters.id; 
+		await dynamo.send(
+			new UpdateCommand({
+				TableName: tableName, 
+				Key: {
+					"id": id
+				},
+				UpdateExpression: "set SongTitle = :s",
+				ExpressionsAttributeValues: {
+					":s": group.SongTitle
+				}
+			})
+		)
+		body = `Change songTitle ${id}`
+		
+	} catch (err) {
+		statusCode = 400;
+		body = err.message;
+	  } finally {
+		body = JSON.stringify(body);
+	  }
+	
+	  return {
+		statusCode,
+		body,
+		headers,
+	  };
+};
