@@ -23,7 +23,7 @@ export const handler = async (event) => {
 					"id": id
 				},
 				UpdateExpression: "set SongTitle = :s",
-				ExpressionsAttributeValues: {
+				ExpressionAttributeValues: {
 					":s": group.SongTitle
 				}
 			})
