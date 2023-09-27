@@ -20,20 +20,24 @@ export const handler = async (event) => {
 		let updateExpression = 'set'; 
 		let expressionAttributeValues = {}; 
 
+		//ändra både gruppen och songtitle
+		if (group.SongTitle && group.Group) {
+			updateExpression += '#S = :s, #G = :g';
+			expressionAttributeValues[':s'] = group.SongTitle;
+			expressionAttributeValues[':g'] = group.Group;
+		}
+
 		//ändra songtitle
-		if (group.SongTitle) {
-			updateExpression += ' SongTitle = :s'; 
+		else if (group.SongTitle) {
+			updateExpression += ' #S = :s'; 
 			expressionAttributeValues[':s'] = group.SongTitle; 
 		}
 		//ändra gruppen
-		if (group.Group) {
-			updateExpression += ' Group = :g'; 
+		else if (group.Group) {
+			updateExpression += ' #G = :g'; 
 			expressionAttributeValues[':g'] = group.Group; 
 		}
-		//ändra både gruppen och songtitle
-		if (group.SongTitle && group.Group) {
-			updateExpression += ',';
-		}
+	
 		
 		await dynamo.send(
 			new UpdateCommand({
@@ -43,9 +47,13 @@ export const handler = async (event) => {
 				},
 				UpdateExpression: updateExpression,
 				ExpressionAttributeValues: expressionAttributeValues, 
+				ExpressionAttributeNames: {
+					"#G": "Group", 
+					"#S": "SongTitle"
+				}
 			})
 		)
-		body = `Change in songtitle and group ${id}`
+		body = `Change in your item ${id}`
 	} catch (error) {
 		statusCode = 400; 
 		body = error.message;
