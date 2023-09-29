@@ -13,6 +13,7 @@ export const handler = async (event) => {
 		"Content-type": "application/json"
 	}
 	try {
+		//Känna av om det är rätt id
 		const { Item } = await dynamo.send(
 			new GetCommand({
 				TableName: tableName, 
@@ -24,6 +25,7 @@ export const handler = async (event) => {
 		if (!Item) {
 			throw new Error('ID not found')
 		}
+		//rätt id - ta bort gruppen med namn och sångtitel
 		await dynamo.send(
 			new DeleteCommand({
 				TableName: tableName, 

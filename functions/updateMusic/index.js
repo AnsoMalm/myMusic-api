@@ -20,7 +20,7 @@ export const handler = async (event) => {
 		let expressionAttributeValues = {}; 
 		let expressionAttributeNames = {}; 
 
-		//ändra både gruppen och songtitle
+		//ändra både gruppen och sångtitel
 		if (group.SongTitle && group.Group) {
 			updateExpression += '#S = :s, #G = :g';
 			expressionAttributeValues[':s'] = group.SongTitle;
@@ -29,7 +29,7 @@ export const handler = async (event) => {
 			expressionAttributeNames['#G'] = 'Group';
 		}
 
-		//ändra songtitle
+		//ändra sångtiteln
 		else if (group.SongTitle) {
 			updateExpression += ' #S = :s'; 
 			expressionAttributeValues[':s'] = group.SongTitle; 
@@ -42,7 +42,7 @@ export const handler = async (event) => {
 			expressionAttributeNames['#G'] = 'Group'; 
 		}
 	
-		
+		//Ändrar utifrån id 
 		await dynamo.send(
 			new UpdateCommand({
 				TableName: tableName, 
@@ -67,33 +67,3 @@ export const handler = async (event) => {
 		headers, 
 	}
 }
-
-
-//Denna kod är för att kunna ändra songtitle i sin grupp. 
-// 		await dynamo.send(
-// 			new UpdateCommand({
-// 				TableName: tableName, 
-// 				Key: {
-// 					"id": id
-// 				},
-// 				updateExpression: "set SongTitle = :s",
-// 				ExpressionAttributeValues: {
-// 					":s": group.SongTitle
-// 				}
-// 			})
-// 		)
-// 		body = `Change songTitle ${id}`
-		
-// 	} catch (err) {
-// 		statusCode = 400;
-// 		body = err.message;
-// 	  } finally {
-// 		body = JSON.stringify(body);
-// 	  }
-	
-// 	  return {
-// 		statusCode,
-// 		body,
-// 		headers,
-// 	  };
-// };

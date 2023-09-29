@@ -14,6 +14,7 @@ export const handler = async (event) => {
 	}
 
 	try {
+		//Scannar av alla items i dynamodb för att hitta alla. 
 			body = await dynamo.send(
 				new ScanCommand({TableName: tableName})
 			); 

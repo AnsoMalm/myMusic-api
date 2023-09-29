@@ -15,8 +15,10 @@ export const handler = async (event) => {
 		"Content-type": "application/json"
 	}
 	try {
+		//Skapar ett slumpmmässigt id 
 		const id = nanoid()
 		const group = JSON.parse(event.body); 
+		//Lägger till en ny grupp med sångtitel 
 		await dynamo.send(
 			new PutCommand({
 				TableName: tableName,
