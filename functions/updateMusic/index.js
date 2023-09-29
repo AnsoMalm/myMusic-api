@@ -13,6 +13,7 @@ export const handler = async (event) => {
 		"Content-type": "application/json"
 	}
 	try {
+		//känna efter group och vilket id
 		const group = JSON.parse(event.body)
 		const id = event.pathParameters.id; 
 		
